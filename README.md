@@ -18,7 +18,7 @@ The QR code will contain a JSON object with the following structure:
 
     { 
         "Name", "MyString",
-        "Key", "EncodedStringWithSalt"
+        "Key", "HashedStringWithSalt"
     }
     
 Where, 
@@ -31,15 +31,15 @@ The contents of the QR code can be modified in `QRCodeSupplier` class, while the
 
 ### Running the project
 
-The generation of the executable jar file can be performed by issuing the following command
+The generation of the executable jar file can be performed by issuing the following command:
 
     mvn clean package
 
-This will create an executable jar file `qrcreator.jar` within the _target_ maven folder. This can be started by executing the following command
+This will create an executable jar file `qrcreator.jar` within the _target_ maven folder. This can be started by executing the following command:
 
     java -jar target/qrcreator.jar
 
-To launch the test page, open your browser at the following URL
+To launch the test page, open your browser at the following URL:
 
     http://localhost:8181/qrcreator/index.html
 
@@ -50,7 +50,7 @@ By default, there is always the creation of a JAX-RS application class to define
 
 The application's endpoint is defined in class `QRController`.
 
-More information on MicroProfile can be found [here](https://microprofile.io/).
+More information on MicroProfile can be found [here][1].
 
 
 ### Config
@@ -71,7 +71,7 @@ The class `ServiceHealthCheck` contains an example of a custom check which can b
 
 The Metrics exports _Telemetric_ data in a uniform way of system and custom resources ([specification][4]).
 
-The class `RandomStringsController` contains an example how you can measure the execution time of a request. The index page also contains a link to the metric page (with all metric info).
+The class `QRController` contains an example how you can measure the execution time of a request. The index page also contains a link to the metric page (with all metric info).
 
 
 ### Open API
