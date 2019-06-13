@@ -27,9 +27,6 @@ import java.util.Map;
 public class QRCodeSupplier {
 
     @Inject
-    SecretKeySupplier keySupplier;
-
-    @Inject
     QRCodeContentsSupplier qrCodeContentsSupplier;
 
     public byte[] qrCodeGenerator(String id) throws IOException, WriterException, InvalidKeySpecException, NoSuchAlgorithmException {
