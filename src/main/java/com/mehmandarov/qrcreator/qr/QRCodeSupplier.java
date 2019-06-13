@@ -27,7 +27,10 @@ import java.util.Map;
 public class QRCodeSupplier {
 
     @Inject
-    SecretKeySupplier keyProvider;
+    SecretKeySupplier keySupplier;
+
+    @Inject
+    QRCodeContentsSupplier qrCodeContentsSupplier;
 
     public byte[] qrCodeGenerator(String id) throws IOException, WriterException, InvalidKeySpecException, NoSuchAlgorithmException {
 
@@ -36,12 +39,7 @@ public class QRCodeSupplier {
         Map hintMap = new HashMap();
         hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
 
-        Map<String, String> qrCodeDataMap = Map.of(
-                "Name", id,
-                "Key", keyProvider.generateVerificationKey(id)
-        );
-
-        String jsonString = new JSONObject(qrCodeDataMap).toString();
+        String jsonString = qrCodeContentsSupplier.getQRCodeContents(id);
         createQRCode(jsonString, filePath, charset, hintMap, 500, 500);
 
         BufferedImage image = ImageIO.read(new File(filePath));

@@ -3,11 +3,14 @@ package com.mehmandarov.qrcreator;
 import com.google.zxing.WriterException;
 import com.itextpdf.text.DocumentException;
 import com.mehmandarov.qrcreator.document.PDFDocumentSupplier;
+import com.mehmandarov.qrcreator.qr.QRCodeContentsSupplier;
 import com.mehmandarov.qrcreator.qr.QRCodeSupplier;
+import com.mehmandarov.qrcreator.security.SecretKeySupplier;
 import org.eclipse.microprofile.metrics.MetricUnits;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Metered;
 import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.json.JSONObject;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -19,6 +22,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Map;
 
 /**
  *
@@ -31,12 +35,43 @@ public class QRController {
     QRCodeSupplier qrCodeSupplier;
 
     @Inject
+    QRCodeContentsSupplier qrCodeContentsSupplier;
+
+    @Inject
     PDFDocumentSupplier pdfDocumentSupplier;
+
+    @GET
+    @Path("{id}/json")
+    @Produces("application/json")
+    @Operation(summary = "Returns a JSON with a string and a hash based on string specified in the URL",
+            description = "Generates a JSON with a string and a hash based on string provided in " +
+                    "the URL and the hashed (with salt) value of that string.")
+    @Metered(name = "numberOfCallsTo_StringKeyTuples_JSON", unit = MetricUnits.MINUTES,
+            description = "Metrics to monitor numbers of calls to get QR codes.", absolute = true)
+    @Counted(unit = MetricUnits.NONE,
+            name = "totalCallsCountToGenerateNameKeyTuples",
+            absolute = true,
+            monotonic = true,
+            displayName = "Number of calls to generate the string-key tuples.",
+            description = "Total count of calls to generate string-key tuples.",
+            tags = {"calls=StringKeyTuple"})
+    public Response createIdKeyTuple(@PathParam("id") String id) {
+        String nameKeyTuple = null;
+        try {
+            nameKeyTuple = qrCodeContentsSupplier.getQRCodeContents(id);
+            return Response.ok(nameKeyTuple).build();
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return Response.serverError().build();
+    }
 
     @GET
     @Path("{id}")
     @Produces("image/png")
-    @Operation(summary = "Returns a QR code image based on string specifies in the URL",
+    @Operation(summary = "Returns a QR code image based on string specified in the URL",
             description = "Generates a QR code PNG image containing a JSON object with the string provided in " +
                     "the URL and the hashed (with salt) value of that string.")
     @Metered(name = "numberOfCallsQR_PNG", unit = MetricUnits.MINUTES,
