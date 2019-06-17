@@ -1,16 +1,13 @@
 package com.mehmandarov.qrcreator;
 
 import com.google.zxing.WriterException;
-import com.itextpdf.text.DocumentException;
 import com.mehmandarov.qrcreator.document.PDFDocumentSupplier;
 import com.mehmandarov.qrcreator.qr.QRCodeContentsSupplier;
 import com.mehmandarov.qrcreator.qr.QRCodeSupplier;
-import com.mehmandarov.qrcreator.security.SecretKeySupplier;
 import org.eclipse.microprofile.metrics.MetricUnits;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Metered;
 import org.eclipse.microprofile.openapi.annotations.Operation;
-import org.json.JSONObject;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -22,7 +19,6 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Map;
 
 /**
  *
@@ -130,8 +126,6 @@ public class QRController {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-        } catch (DocumentException e) {
             e.printStackTrace();
         }
         return Response.serverError().build();
