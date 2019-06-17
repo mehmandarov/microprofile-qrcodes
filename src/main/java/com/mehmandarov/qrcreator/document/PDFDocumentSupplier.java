@@ -13,16 +13,12 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Calendar;
 
 
 public class PDFDocumentSupplier {
@@ -52,6 +48,7 @@ public class PDFDocumentSupplier {
         float titleStartY = mediaBox.getHeight() - marginTop - titleHeight;
 
         // add header text to the document
+        // *Note*: This solution will not support fixed-width paragraphs and text flow
         contentStream.beginText();
         contentStream.setFont(headerFont, fontSize);
         contentStream.newLineAtOffset(titleStartX, titleStartY);
