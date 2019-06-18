@@ -60,6 +60,8 @@ public class QRController {
             e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return Response.serverError().build();
     }
@@ -94,13 +96,15 @@ public class QRController {
             e.printStackTrace();
         } catch (InvalidKeySpecException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return Response.serverError().build();
     }
 
     @GET
     @Path("{id}/pdf")
-    @Produces("application/pdf")
+    @Produces("application/pdf; charset=utf-8")
     @Operation(summary = "Returns a PDF file with the QR code based on string specifies in the URL",
             description = "Generates a PDF with the QR code containing a JSON object with the string provided in " +
                     "the URL and the hashed (with salt) value of that string.")
@@ -126,6 +130,8 @@ public class QRController {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return Response.serverError().build();
